@@ -18,7 +18,14 @@ class News(models.Model):
         self.save()
 
 
+class CoursesManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
+
 class Courses(models.Model):
+    objects = CoursesManager()
+
     name = models.CharField(max_length=256, verbose_name="Name")
     description = models.TextField(verbose_name="Description", blank=True, null=True)
     description_as_markdown = models.BooleanField(verbose_name="As markdown", default=False)
@@ -61,7 +68,7 @@ class CourseTeachers(models.Model):
     course = models.ManyToManyField(Courses)
     name_first = models.CharField(max_length=128, verbose_name="Name")
     name_second = models.CharField(max_length=128, verbose_name="Surname")
-    day_birth = models.DateField(verbose_name="Birth date")
+    day_birth = models.DateField(verbose_name="Birth date"))
     deleted = models.BooleanField(default=False)
 
     def __str__(self) -> str:
